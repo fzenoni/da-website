@@ -141,13 +141,16 @@ ga('send', 'pageview');
 <div id="a-naive-strategy" class="section level3">
 <h3>A naive strategy</h3>
 <p>This seems like a lot of towns, certainly too much for the sole Brussels-Capital Region! Indeed I queried objects inside some rectangular bounding box of the city, defined by Overpass itself. In an ideal world however, we could filter the 19 relevant commune’s names by selecting for instance their postcodes. We know that postcodes inside Brussels Region are included between 1000 and 1210.</p>
-<pre class="r"><code>municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.character(addr.postcode))
+<pre class="r"><code># Unfactor addr.postcode column
+municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.character(addr.postcode))
 municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.numeric(addr.postcode))
+# Filter table
 filtered_bxl &lt;- municipalities %&gt;% filter(addr.postcode &gt;= 1000 &amp; addr.postcode &lt;= 1210)
 qtm(filtered_bxl)</code></pre>
 <p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>But this is not good either! Indeed, let’s have a look at the original dataset. For the sake of space I’ll only show the first few entries.</p>
 <pre class="r"><code>table &lt;- municipalities
+# Remove geometry from table
 st_geometry(table) &lt;- NULL
 kable(head(table[, c(&#39;name&#39;, &#39;addr.postcode&#39;)]))</code></pre>
 <table>
@@ -196,7 +199,7 @@ qtm(bxl_region)</code></pre>
 <p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>Now we have the shape of Brussels-Capital, but how do extract the municipalities inside of these boundaries? The general, documented way to perform such an operation is trivial.</p>
 <pre class="r"><code>qtm(municipalities[bxl_region, ]) +
-  tm_shape(bxl_region) + tm_borders(col = &#39;red&#39;)</code></pre>
+  tm_shape(bxl_region) + tm_borders(col = &#39;red&#39;) # Overlay Brussels region borders in red</code></pre>
 <p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>Unfortunately, it seems that municipalities immediately outside of the Brussels region (whose borders are highlighted in red for clarity) are still included. This is probably due to the inclusion of the lines common to internal and external municipalities, and the entire polygons that includes them.</p>
 </div>
@@ -205,21 +208,23 @@ qtm(bxl_region)</code></pre>
 <p>At this point, there may be a few different options. At first, I decided to go through explicit intersection of polygons. However, we need valid polygons in order to do that (and OSM polygons are invalid more often than not). In order to fix broken polygons, you will need to link the <code>sf</code> package against the <em>liblwgeom</em> library installed for your machine. I’ve never managed to install this library on Windows, so leave your solution in the comments if you know how to do it! In any case we’re going to project the map on the appropriate CRS (ETRS89 / Belgian Lambert 2008). The output of the intersection partially consists in line strings, as I suspected from the default subset operation. We don’t need them for the display, so we identify and exclude them. The following works.</p>
 <pre class="r"><code>municipalities &lt;- st_transform(municipalities, 3812)
 bxl_region &lt;- st_transform(bxl_region, 3812)
-# Make sure all polygons are valid
+# Fix the polygons before the intersection, or it will fail
 if(!all(st_is_valid(municipalities))) {
   municipalities &lt;- municipalities %&gt;% st_make_valid()
 }
 bxl_municipalities &lt;- st_intersection(municipalities, bxl_region)
+# Select the polygons. The elements with an index greater than 19 are linestrings.
 bxl_municipalities_poly &lt;- bxl_municipalities[1:19, ]</code></pre>
 <p>Later however, I realized that it was also possible to compute a <em>negative buffer</em> from a polygon, which may represent a more compact, if not “softer”, option in this case, which I adopt.</p>
-<pre class="r"><code>neg_buffer &lt;- st_buffer(bxl_region, -100)
+<pre class="r"><code>neg_buffer &lt;- st_buffer(bxl_region, -100) # in meters
 bxl_municipalities_poly &lt;- municipalities[neg_buffer, ]</code></pre>
 </div>
 </div>
 <div id="final-act" class="section level2">
 <h2>Final act</h2>
 <p>At this point we can make use of one of the two <code>bxl_municipalities_poly</code> objects that we computed, as they are identical.</p>
-<pre class="r"><code>bxl_municipalities_poly &lt;- bxl_municipalities_poly %&gt;% mutate(name = droplevels(name))
+<pre class="r"><code># Drop the municipalities factors excluded from the latest subset operations, or they will appear in the legend.
+bxl_municipalities_poly &lt;- bxl_municipalities_poly %&gt;% mutate(name = droplevels(name))
 tm_shape(bxl_municipalities_poly) + tm_polygons(title = &#39;Municipalities&#39;, col = &#39;name&#39;) + tm_layout(legend.outside = TRUE)</code></pre>
 <p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>That’s it! We can make the map a little prettier by adding some details. Also, colors could be improved.</p>
