@@ -21,5 +21,32 @@
       <description></description>
     </item>
     
+    <item>
+      <title>Osmdata</title>
+      <link>/tags/osmdata/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/osmdata/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sf</title>
+      <link>/tags/sf/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/sf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tmap</title>
+      <link>/tags/tmap/</link>
+      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tmap/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
