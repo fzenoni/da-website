@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Creating maps with R and OpenStreetMap &middot; Florian Zenoni</title>
+        <meta name="description" content="GitHub The code for the herein described process can also be freely downloaded from https://github.com/fzenoni/bcr-map.
+ Drawing maps with R In the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of tidy data summarized by Hadley Wickham (https://www.jstatsoft.org/article/view/v059i10) led to the development of R packages such as sf and tmap, as well as considerable improvement of the well-known R graphic library, ggplot2.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.29" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Creating maps with R and OpenStreetMap">
+<meta property="og:description" content="GitHub The code for the herein described process can also be freely downloaded from https://github.com/fzenoni/bcr-map.
+ Drawing maps with R In the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of tidy data summarized by Hadley Wickham (https://www.jstatsoft.org/article/view/v059i10) led to the development of R packages such as sf and tmap, as well as considerable improvement of the well-known R graphic library, ggplot2.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="/2017/10/10/2017-10-10-creating-maps-with-r-and-openstreetmap/">
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+    </head>
+    <body>
+        
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'XXX', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Altran ISY Data Analytics" href="/">Altran ISY Data Analytics</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                            <a class="button-square button-social hint--top" data-hint="Twitter" title="Twitter" href="https://twitter.com/FlorianZenoni">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/fzenoni">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="LinkedIn" title="LinkedIn" href="https://linkedin.com/in/florianzenoni/">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:florian.zenoni@altran.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Projects" href="/project/">Projects</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Contact" href="/page/contact/">Contact</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="About" href="/page/about/">About</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Getting Started with Hugo" href="/2014/04/02/hugoisforlovers/">Getting Started with Hugo</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Creating maps with R and OpenStreetMap</h1>
+    
+    <p class="post-date">
+        <span>Published <time datetime="2017-10-10" itemprop="datePublished">Tue, Oct 10, 2017</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="https://google.com/&#43;XXX" itemprop="url" rel="author">Florian Zenoni</a>
+            </span>
+        </span>
+    </p>
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <div id="github" class="section level3">
+<h3>GitHub</h3>
+<p>The code for the herein described process can also be freely downloaded from <a href="https://github.com/fzenoni/bcr-map" class="uri">https://github.com/fzenoni/bcr-map</a>.</p>
+</div>
+<div id="drawing-maps-with-r" class="section level2">
+<h2>Drawing maps with R</h2>
+<p>In the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of <em>tidy data</em> summarized by Hadley Wickham (<a href="https://www.jstatsoft.org/article/view/v059i10" class="uri">https://www.jstatsoft.org/article/view/v059i10</a>) led to the development of R packages such as <a href="https://cran.r-project.org/package=sf"><code>sf</code></a> and <a href="https://cran.r-project.org/package=tmap"><code>tmap</code></a>, as well as considerable improvement of the well-known R graphic library, <a href="https://cran.r-project.org/package=ggplot2"><code>ggplot2</code></a>. Moreover, it is a celebrated fact that data has never been more available than today: it is also easier than ever to extract geographical information from OpenStreetMap (OSM) databases thanks to the <a href="https://cran.r-project.org/package=osmdata"><code>osmdata</code></a> package, while staying in the R ecosystem. This package acts as a smart interface between the user and the dreaded official OSM query language, called Overpass.</p>
+<p>With this geographical “holy trinity” in the making at our disposal (even though <code>tmap</code> still silently makes conversions from <code>sf</code> to the older <code>sp</code> objects), extracting the administrative boundaries of Brussels, for instance, and plotting them has therefore become not only extremely fast, easy, but also <em>reproducible</em>. In fact, when dealing with Geographical Information Systems (GIS) usually one has to worry about the sources of the files he or she is going to manipulate and display. The traditional approach consists then in opening a GIS program, such as QGIS or ArcGIS, and start clicking around one’s way through the building of an appropriate map. The following solution, in turn, allows the user <em>to never quit the R environment</em>.</p>
+<p>As an exercise, I’m going to display the boundaries of the municipalities locate in the Belgian region of Brussels-Capital. Despite the workflow is rather linear on paper, some caveats and a critical approach are still necessary, and this is what motivated me to write this blog post. My approach to this matter is certainly not original, and I don’t expect to teach anything new to the more experienced R users. On the contrary, real R beginners may struggle in following some of the language shortcuts.</p>
+<p>So, let’s start.</p>
+</div>
+<div id="extraction-of-the-political-boundaries" class="section level2">
+<h2>Extraction of the political boundaries</h2>
+<p>To identify our region of interest, we must know a few definitions. As we decided to access the OSM database, we must know whatever key and values are the most used by the community. Administrative boundaries are not internationally defined in a unique way, so we must check how specific countries deal with these different levels. The reference webpage is the following: <a href="http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative">http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative</a>. We’re then able to find out that Belgian municipalities are described by level 8.</p>
+<pre class="r"><code>boundaries &lt;- opq(bbox = &#39;Brussels, Belgium&#39;) %&gt;%
+  add_osm_feature(key = &#39;admin_level&#39;, value = &#39;8&#39;) %&gt;% 
+  osmdata_sf %&gt;% unique_osmdata</code></pre>
+<p>We can now extract the actual geometrical boundaries from this object…</p>
+<pre class="r"><code>municipalities &lt;- boundaries$osm_multipolygons</code></pre>
+<p>… And quickly display it thanks to the <code>tmap::qtm()</code> function.</p>
+<pre class="r"><code>qtm(municipalities)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="filtering-the-municipalities" class="section level2">
+<h2>Filtering the municipalities</h2>
+<div id="a-naive-strategy" class="section level3">
+<h3>A naive strategy</h3>
+<p>This seems like a lot of towns, certainly too much for the sole Brussels-Capital Region! Indeed I queried objects inside some rectangular bounding box of the city, defined by Overpass itself. In an ideal world however, we could filter the 19 relevant commune’s names by selecting for instance their postcodes. We know that postcodes inside Brussels Region are included between 1000 and 1210.</p>
+<pre class="r"><code>municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.character(addr.postcode))
+municipalities &lt;- municipalities %&gt;% mutate(addr.postcode = as.numeric(addr.postcode))
+filtered_bxl &lt;- municipalities %&gt;% filter(addr.postcode &gt;= 1000 &amp; addr.postcode &lt;= 1210)
+qtm(filtered_bxl)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>But this is not good either! Indeed, let’s have a look at the original dataset. For the sake of space I’ll only show the first few entries.</p>
+<pre class="r"><code>table &lt;- municipalities
+st_geometry(table) &lt;- NULL
+kable(head(table[, c(&#39;name&#39;, &#39;addr.postcode&#39;)]))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">addr.postcode</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Saint-Gilles - Sint-Gillis</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Forest - Vorst</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Ixelles - Elsene</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Etterbeek</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Uccle - Ukkel</td>
+<td align="right">1180</td>
+</tr>
+<tr class="even">
+<td align="left">Anderlecht</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="other-boundaries-to-the-rescue" class="section level3">
+<h3>Other boundaries to the rescue</h3>
+<p>First lesson learnt. We easily notice that, as it often happens when scraping online data, information is incomplete, and many postcodes are missing. Since we do trust the geographical information reported by OSM, we therefore need to think of another strategy, independent of whatever other information OSM databases may or may not include. In the first query we specified the number ‘8’, corresponding for Belgium to the administrative level of Municipalities. As regions are identified by number ‘4’, we can rely on that one to select more precisely our boundaries of interest.</p>
+<pre class="r"><code>regions &lt;- opq(bbox = &#39;Brussels, Belgium&#39;) %&gt;%
+  add_osm_feature(key = &#39;admin_level&#39;, value = &#39;4&#39;) %&gt;% 
+  osmdata_sf %&gt;% unique_osmdata</code></pre>
+<pre class="r"><code>bxl_region &lt;- regions$osm_multipolygons %&gt;% filter(osm_id == &#39;54094&#39;)
+qtm(bxl_region)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Now we have the shape of Brussels-Capital, but how do extract the municipalities inside of these boundaries? The general, documented way to perform such an operation is trivial.</p>
+<pre class="r"><code>qtm(municipalities[bxl_region, ]) +
+  tm_shape(bxl_region) + tm_borders(col = &#39;red&#39;)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Unfortunately, it seems that municipalities immediately outside of the Brussels region (whose borders are highlighted in red for clarity) are still included. This is probably due to the inclusion of the lines common to internal and external municipalities, and the entire polygons that includes them.</p>
+</div>
+<div id="two-options" class="section level3">
+<h3>Two options</h3>
+<p>At this point, there may be a few different options. At first, I decided to go through explicit intersection of polygons (but we need valid polygons in order to do that, and OSM polygons are invalid more often than not). In both cases, however we’re going to project the map on the appropriate CRS (ETRS89 / Belgian Lambert 2008). The output of the intersection partially consists in line strings, as I suspected from the default subset operation. We don’t need them for the display, so we identify and exclude them. The following works.</p>
+<pre class="r"><code>municipalities &lt;- st_transform(municipalities, 3812)
+bxl_region &lt;- st_transform(bxl_region, 3812)
+# Make sure all polygons are valid
+if(!all(st_is_valid(municipalities))) {
+  municipalities &lt;- municipalities %&gt;% st_make_valid()
+}
+bxl_municipalities &lt;- st_intersection(municipalities, bxl_region)
+bxl_municipalities_poly &lt;- bxl_municipalities[1:19, ]</code></pre>
+<p>But later, I realized that it was also possible to compute a <em>negative buffer</em> from a polygon, which may represent a more compact, if not “softer”, option in this case, which I adopt.</p>
+<pre class="r"><code>neg_buffer &lt;- st_buffer(bxl_region, -100)
+bxl_municipalities_poly &lt;- municipalities[neg_buffer, ]</code></pre>
+</div>
+</div>
+<div id="final-act" class="section level2">
+<h2>Final act</h2>
+<p>At this point we can make use of one of the two <code>bxl_municipalities_poly</code> objects that we computed, as they are identical.</p>
+<pre class="r"><code>bxl_municipalities_poly &lt;- bxl_municipalities_poly %&gt;% mutate(name = droplevels(name))
+tm_shape(bxl_municipalities_poly) + tm_polygons(title = &#39;Municipalities&#39;, col = &#39;name&#39;) + tm_layout(legend.outside = TRUE)</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>That’s it! We can make the map a little prettier by adding some details. Also, colors could be improved.</p>
+<pre class="r"><code>tm_style_col_blind() +
+  tm_shape(bxl_municipalities_poly) + tm_polygons(title = &#39;Brussels Capital Municipalities&#39;, border.col = &#39;grey40&#39;, col = &#39;name&#39;, alpha = 0.6) +
+  tm_shape(bxl_region) + tm_borders(col = &#39;grey20&#39;, lwd = 2, alpha = 0.8) +
+  tm_layout(legend.outside = TRUE, frame.double.line = TRUE) +
+  tm_grid(projection = &#39;longlat&#39;, n.x = 5) + tm_scale_bar() + tm_compass(position = c(&#39;right&#39;, &#39;top&#39;))</code></pre>
+<p><img src="/post/2017-10-10-creating-maps-with-r-and-openstreetmap_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>I’m still not completely satisfied, but with more time and some more experience in data visualization things could be improved. Anyway, it’s a good start.</p>
+<p>On the next episode we’ll see how to deal with a port city: how can we display the coastline?</p>
+</div>
+<div id="acknowledgements" class="section level2">
+<h2>Acknowledgements</h2>
+<p>I would like to thank Timo Grossenbacher (<a href="https://timogrossenbacher.ch" class="uri">https://timogrossenbacher.ch</a>) for the public release of his “template for bootstrapping reproducible RMarkdown documents for data journalistic purposes”. You may clone it from here: <a href="https://github.com/grssnbchr/rddj-template" class="uri">https://github.com/grssnbchr/rddj-template</a>.</p>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/openstreetmap/">OpenStreetMap</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Creating%20maps%20with%20R%20and%20OpenStreetMap&url=%2f2017%2f10%2f10%2f2017-10-10-creating-maps-with-r-and-openstreetmap%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=%2f2017%2f10%2f10%2f2017-10-10-creating-maps-with-r-and-openstreetmap%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+            <a class="icon-google-plus" href="https://plus.google.com/share?url=%2f2017%2f10%2f10%2f2017-10-10-creating-maps-with-r-and-openstreetmap%2f"
+              onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+              <i class="fa fa-google-plus"></i>
+                <span class="hidden">Google+</span>
+            </a>
+        
+        
+            <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&title=Creating%20maps%20with%20R%20and%20OpenStreetMap&url=%2f2017%2f10%2f10%2f2017-10-10-creating-maps-with-r-and-openstreetmap%2f&summary="
+               onclick="window.open(this.href, 'linkedin-share', 'width=554,height=481');return false;">
+               <i class="fa fa-linkedin"></i>
+               <span class="hidden">LinkedIn</span>
+            </a>
+        
+    </div>
+</footer>
+
+        
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "XXX" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Altran ISY Data Analytics" href="/">Altran ISY Data Analytics</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2017 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+
