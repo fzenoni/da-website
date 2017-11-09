@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Florian Zenoni</copyright>
-    <lastBuildDate>Tue, 10 Oct 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Nov 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Openstreetmap</title>
       <link>/tags/openstreetmap/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 09 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/openstreetmap/</guid>
       <description></description>
@@ -24,7 +24,7 @@
     <item>
       <title>Osmdata</title>
       <link>/tags/osmdata/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 09 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/osmdata/</guid>
       <description></description>
@@ -33,7 +33,7 @@
     <item>
       <title>Sf</title>
       <link>/tags/sf/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 09 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/sf/</guid>
       <description></description>
@@ -42,7 +42,7 @@
     <item>
       <title>Tmap</title>
       <link>/tags/tmap/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 09 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/tmap/</guid>
       <description></description>
