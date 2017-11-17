@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Pages on Altran ISY Data Analytics</title>
+    <title>Pages on Data Analytics</title>
     <link>/page/</link>
-    <description>Recent content in Pages on Altran ISY Data Analytics</description>
+    <description>Recent content in Pages on Data Analytics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Florian Zenoni</copyright>
@@ -18,8 +18,7 @@
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0200</pubDate>
       
       <guid>/page/about/</guid>
-      <description>About us The Data Analytics team is part of the Altran Belux Intelligent Systems (ISY) division, and provides engineering services to several customers in Belgium. Our academic background is in engineering and/or physical sciences, and our job is all about making sense out of data. We&amp;rsquo;re spread between Brussels and Ghent (and sometimes Leuven).
-Altran Altran Technologies is an innovation an engineering consulting firm. We operate in high technology in a variety of domains, from life sciences to mechanical engineering, from the energy to the transportation sector.</description>
+      <description>About us Our academic background is in engineering and/or physical sciences, and our job is all about making sense out of data. We&amp;rsquo;re spread between Brussels and Ghent (and sometimes Leuven). We created this blog in the attempt to give back some of the passion and love we got from the online community in all these years.</description>
     </item>
     
     <item>
@@ -28,7 +27,7 @@ Altran Altran Technologies is an innovation an engineering consulting firm. We o
       <pubDate>Fri, 03 Apr 2015 02:13:50 +0000</pubDate>
       
       <guid>/page/contact/</guid>
-      <description>Contact If you have questions or suggestions you can contact our team leader Catalin Lupu.</description>
+      <description>Contact Work in progress, stay tuned!</description>
     </item>
     
   </channel>
