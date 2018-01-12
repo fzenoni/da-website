@@ -18,9 +18,9 @@
       <pubDate>Thu, 09 Nov 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/11/09/2017-11-09-creating-maps-with-coastlines/</guid>
-      <description>GitHub The code for the herein described process can also be freely downloaded from https://github.com/fzenoni/coast-map.
- Where were we In the previous post (click here if you missed it), we managed to put together a relatively short chunk of code that generated the following rather nice map of Brussels Region, which includes all of its 19 municipalities.
- A new challenger appears In that post, we discussed how a certain amount of challenges were overcome.</description>
+      <description>GitHubThe code for the herein described process can also be freely downloaded from https://github.com/fzenoni/coast-map.
+Where were weIn the previous post (click here if you missed it), we managed to put together a relatively short chunk of code that generated the following rather nice map of Brussels Region, which includes all of its 19 municipalities.
+A new challenger appearsIn that post, we discussed how a certain amount of challenges were overcome.</description>
     </item>
     
     <item>
@@ -29,8 +29,8 @@
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
       
       <guid>/2017/10/10/2017-10-10-creating-maps-with-r-and-openstreetmap/</guid>
-      <description>GitHub The code for the herein described process can also be freely downloaded from https://github.com/fzenoni/bcr-map.
- Drawing maps with R In the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of tidy data summarized by Hadley Wickham (https://www.jstatsoft.org/article/view/v059i10) led to the development of R packages such as sf and tmap, as well as considerable improvement of the well-known R graphic library, ggplot2.</description>
+      <description>GitHubThe code for the herein described process can also be freely downloaded from https://github.com/fzenoni/bcr-map.
+Drawing maps with RIn the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of tidy data summarized by Hadley Wickham (https://www.jstatsoft.org/article/view/v059i10) led to the development of R packages such as sf and tmap, as well as considerable improvement of the well-known R graphic library, ggplot2.</description>
     </item>
     
   </channel>
