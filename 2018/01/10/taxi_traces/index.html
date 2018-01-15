@@ -4,14 +4,16 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Viewing and analysing GPS traces with R &middot; Florian Zenoni</title>
-        <meta name="description" content="Viewing and analysing GPS traces with R Nowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces.">
+        <meta name="description" content="GitHubThe code for the herein described process can also be freely downloaded from https://github.com/osteso/taxi_traces.
+Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
         <meta name="generator" content="Hugo 0.32.4" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Viewing and analysing GPS traces with R">
-<meta property="og:description" content="Viewing and analysing GPS traces with R Nowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces.">
+<meta property="og:description" content="GitHubThe code for the herein described process can also be freely downloaded from https://github.com/osteso/taxi_traces.
+Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/2018/01/10/taxi_traces/">
         <link rel="stylesheet" href="/dist/styles.css">
@@ -106,6 +108,10 @@ ga('send', 'pageview');
 <script src="/rmarkdown-libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
 
 
+<div id="github" class="section level3">
+<h3>GitHub</h3>
+<p>The code for the herein described process can also be freely downloaded from <a href="https://github.com/osteso/taxi_traces" class="uri">https://github.com/osteso/taxi_traces</a>.</p>
+</div>
 <div id="viewing-and-analysing-gps-traces-with-r" class="section level2">
 <h2>Viewing and analysing GPS traces with R</h2>
 <p>Nowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces. To this end we will use a subset of the open source <a href="https://www.microsoft.com/en-us/research/publication/t-drive-trajectory-data-sample/">T-Drive trajectory data sample</a>, which covers one week of 10.357 taxi trajectories in Beijing <span class="citation">(Zheng 2011)</span>. The dataset is quite large and for our purposes only a subset is needed. I chose trajectories for which the frequency of sampling is “mostly” greater than 1/60 Hz. This leaves us with data from 10 taxis, more than enough for our current purposes.<br />
@@ -178,18 +184,18 @@ traces &lt;- unique(traces, by = c(&#39;time&#39;, &#39;longitude&#39;, &#39;lat
 traces &lt;- traces[order(time), .SD, taxi_id]
 
 traces[, dt_s := as.numeric(time - shift(time)), 
-       taxi_id]
+  taxi_id]
 traces[, dx_m := geosphere::distGeo(cbind(shift(longitude), shift(latitude)), cbind(longitude, latitude)), 
-       taxi_id]
+  taxi_id]
 traces[, speed_kph := dx_m/dt_s*3.6, 
-       taxi_id]
+  taxi_id]
 
 traces &lt;- traces[!is.na(speed_kph) &amp; speed_kph &lt; 200]</code></pre>
 <p>The unique statement makes sure that there are no duplicate rows.</p>
 <p>Now, what if we want to know the distance traveled by each taxi driver for each day of the week? Using <code>data.table</code> and <code>lubridate</code>, it is very simple, and using <code>ggplot2</code> we can visualise the result in a histogram:</p>
 <pre class="r"><code>traces[, day := weekdays(time)]
 daily_distance &lt;- traces[, .(day_dx_km = sum(dx_m, na.rm = TRUE)/1000), 
-                            by = c(&quot;taxi_id&quot;, &quot;day&quot;)]
+  by = c(&quot;taxi_id&quot;, &quot;day&quot;)]
 
 print(paste0(&quot;Average distance traveled per day by taxis in Beijing: &quot;, signif(daily_distance[, mean(day_dx_km)], 5), &quot; km&quot;))</code></pre>
 <pre><code>## [1] &quot;Average distance traveled per day by taxis in Beijing: 185.49 km&quot;</code></pre>
@@ -208,10 +214,10 @@ print(paste0(&quot;Average distance traveled per day by taxis in Beijing: &quot;
 <pre class="r"><code>traces[, lonsh := shift(longitude)]
 traces[, latsh := shift(latitude)]
 DT_plot &lt;- traces[lubridate::day(time) == 3,][2:.N, 
-              .(geometry = st_sfc(st_linestring(matrix(cbind(longitude, lonsh, latitude, latsh), nrow = 2, ncol = 2))),
-                speed_kph
-                  ),
-              by = c(&quot;taxi_id&quot;, &quot;time&quot;, &quot;longitude&quot;, &quot;latitude&quot;)]
+  .(geometry = st_sfc(st_linestring(matrix(cbind(longitude, lonsh, latitude, latsh), nrow = 2, ncol = 2))),
+    speed_kph
+  ),
+  by = c(&quot;taxi_id&quot;, &quot;time&quot;, &quot;longitude&quot;, &quot;latitude&quot;)]
 
 ## define sf_plot as a simple feature collection:
 sf_plot &lt;- st_sf(DT_plot)
@@ -290,6 +296,22 @@ bar_data[, y := dis_per_district/district_area/sum(dis_per_district/district_are
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/openstreetmap/">OpenStreetMap</a>, 
+            
+                <a href="/tags/sf/">sf</a>, 
+            
+                <a href="/tags/tmap/">tmap</a>, 
+            
+                <a href="/tags/osmdata/">osmdata</a>, 
+            
+                <a href="/tags/leaflet/">leaflet</a>
+            
+        </p>
     
 
     <div class="share">

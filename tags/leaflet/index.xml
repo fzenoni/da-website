@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Leaflet on Data Analytics</title>
+    <link>/tags/leaflet/</link>
+    <description>Recent content in Leaflet on Data Analytics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Florian Zenoni</copyright>
+    <lastBuildDate>Wed, 10 Jan 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/leaflet/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Viewing and analysing GPS traces with R</title>
+      <link>/2018/01/10/taxi_traces/</link>
+      <pubDate>Wed, 10 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/01/10/taxi_traces/</guid>
+      <description>GitHubThe code for the herein described process can also be freely downloaded from https://github.com/osteso/taxi_traces.
+Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing.</description>
+    </item>
+    
+  </channel>
+</rss>

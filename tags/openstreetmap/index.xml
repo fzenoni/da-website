@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Florian Zenoni</copyright>
-    <lastBuildDate>Thu, 09 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jan 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/openstreetmap/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Viewing and analysing GPS traces with R</title>
+      <link>/2018/01/10/taxi_traces/</link>
+      <pubDate>Wed, 10 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/01/10/taxi_traces/</guid>
+      <description>GitHubThe code for the herein described process can also be freely downloaded from https://github.com/osteso/taxi_traces.
+Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing.</description>
+    </item>
     
     <item>
       <title>Creating maps with R and OpenStreetMap (2)</title>
