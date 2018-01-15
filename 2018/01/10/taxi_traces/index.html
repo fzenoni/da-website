@@ -4,16 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Viewing and analysing GPS traces with R &middot; Florian Zenoni</title>
-        <meta name="description" content="GitHubThe code for the herein described process can also be freely downloaded from https://github.com/osteso/taxi_traces.
-Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing.">
+        <meta name="description" content="Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
         <meta name="generator" content="Hugo 0.32.4" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Viewing and analysing GPS traces with R">
-<meta property="og:description" content="GitHubThe code for the herein described process can also be freely downloaded from https://github.com/osteso/taxi_traces.
-Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing.">
+<meta property="og:description" content="Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/2018/01/10/taxi_traces/">
         <link rel="stylesheet" href="/dist/styles.css">
@@ -108,10 +106,8 @@ ga('send', 'pageview');
 <script src="/rmarkdown-libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
 
 
-<div id="github" class="section level3">
-<h3>GitHub</h3>
-<p>The code for the herein described process can also be freely downloaded from <a href="https://github.com/osteso/taxi_traces" class="uri">https://github.com/osteso/taxi_traces</a>.</p>
-</div>
+<!-- ### GitHub -->
+<!-- The code for the herein described process can also be freely downloaded from [https://github.com/osteso/taxi_traces](https://github.com/osteso/taxi_traces). -->
 <div id="viewing-and-analysing-gps-traces-with-r" class="section level2">
 <h2>Viewing and analysing GPS traces with R</h2>
 <p>Nowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces. To this end we will use a subset of the open source <a href="https://www.microsoft.com/en-us/research/publication/t-drive-trajectory-data-sample/">T-Drive trajectory data sample</a>, which covers one week of 10.357 taxi trajectories in Beijing <span class="citation">(Zheng 2011)</span>. The dataset is quite large and for our purposes only a subset is needed. I chose trajectories for which the frequency of sampling is “mostly” greater than 1/60 Hz. This leaves us with data from 10 taxis, more than enough for our current purposes.<br />
