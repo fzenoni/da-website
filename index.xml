@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Florian Zenoni</copyright>
-    <lastBuildDate>Wed, 10 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jan 2018 00:00:00 +0100</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>About us!</title>
+      <link>/page/about/</link>
+      <pubDate>Mon, 22 Jan 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/page/about/</guid>
+      <description>About Altran As a global leader in Engineering and R&amp;amp;D services (ER&amp;amp;D), Altran offers its clients a new way to innovate by developing the products and services of tomorrow. Altran works alongside its clients on every link in the value chain of their project, from conception to industrialization. For over thirty years, the Altran Group has provided its expertise to key players in the Aerospace, Automotive, Defence, Energy, Finance, Life Sciences, Railway, and Telecoms sectors, among others.</description>
+    </item>
     
     <item>
       <title>Viewing and analysing GPS traces with R</title>
@@ -18,7 +27,7 @@
       <pubDate>Wed, 10 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/01/10/taxi_traces/</guid>
-      <description>Viewing and analysing GPS traces with RNowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces.</description>
+      <description>Viewing and analysing GPS traces with R Nowadays most car drivers use GPS services to reach their destinations. Often this is done via a mobile phone, but soon connected cars will be the norm. As a consequence, the amount of geo-positional data of car trips is continuously increasing. In this blog post I will illustrate how we can use R to analyse and visualise GPS traces.</description>
     </item>
     
     <item>
@@ -40,15 +49,6 @@
       <guid>/2017/10/10/2017-10-10-creating-maps-with-r-and-openstreetmap/</guid>
       <description>GitHub The code for the herein described process can also be freely downloaded from https://github.com/fzenoni/bcr-map.
  Drawing maps with R In the last few years the R community has done big steps in providing friendly tools to manipulate tables extended by geographical information. The need to display such information in a simple way, coupled with the prescriptions of tidy data summarized by Hadley Wickham (https://www.jstatsoft.org/article/view/v059i10) led to the development of R packages such as sf and tmap, as well as considerable improvement of the well-known R graphic library, ggplot2.</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>/page/about/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0200</pubDate>
-      
-      <guid>/page/about/</guid>
-      <description>About us Our academic background is in engineering and/or physical sciences, and our job is all about making sense out of data. We&amp;rsquo;re spread between Brussels and Ghent (and sometimes Leuven). We created this blog in the attempt to give back some of the passion and love we got from the online community in all these years.</description>
     </item>
     
     <item>
