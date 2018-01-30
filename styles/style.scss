@@ -2,9 +2,9 @@
 // ============================================================ //
 // ============================================================ //
 
-$primary: #F03838;
+$primary: #007EAF;
 $secondary: #303030;
-$background: #FEFEFE;
+$background: #FFFFFF;
 
 /* ============================================================ */
 /* Base */
@@ -137,14 +137,14 @@ table {
 }
 
 ::selection {
-    background: #FFF5B8;
-    color: #000;
+    background: #464B69;
+    color: #FFF;
     display: block;
 }
 
 ::-moz-selection {
-    background: #FFF5B8;
-    color: #000;
+    background: #464B69;
+    color: #FFF;
     display: block;
 }
 
@@ -173,6 +173,19 @@ table {
     position: relative;
     width: 100%;
     max-width: 889px;
+}
+
+.container_logo {
+    margin: 0 auto;
+    position: relative;
+    width: 25%
+    max-width: 200px;
+}
+
+#banner {
+    width: 100%;
+    background: url("../img/banner.png");
+    background-size: cover;
 }
 
 #wrapper {
@@ -247,7 +260,7 @@ table {
     a {
         float: left;
         background: $primary;
-        color: #FEFEFE;
+        color: #FFFFFF;
         padding: 5px 10px 6px;
 
         &:hover { background: $secondary; }
@@ -270,8 +283,8 @@ table {
     font-size: 14px;
     font-weight: 700;
     margin: 0 10px;
-
-    a:hover { color: #424242; }
+    a { color: #FFFFFF; }
+    a:hover { color: #007EAF; }
 }
 
 /* ============================================================ */
@@ -313,7 +326,6 @@ table {
     a:hover { color: $primary; }
 
     &:after {
-        border-bottom: 1px dotted $secondary;
         content: "";
         display: block;
         margin: 40px auto 0;
@@ -426,7 +438,7 @@ table {
         padding: 20px 5px;
 
         &:hover {
-            background: #FCF5F5;
+            background: #F7FEFF;
             color: $primary;
             padding: 20px 12px;
 
