@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Altran</copyright>
-    <lastBuildDate>Wed, 10 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Feb 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/leaflet/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Meteorites (1)</title>
+      <link>/2018/02/12/meteorites/</link>
+      <pubDate>Mon, 12 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/02/12/meteorites/</guid>
+      <description>GitHub The code for the herein described process can also be freely downloaded from https://github.com/majvdvel/meteorites.
+ Meteorite sightings NASA has opened their database to the world at https://data.nasa.gov/, where they demonstrate their own test data and various measurements around the globe. One of the available datasets (which can be downloaded from this location) contains data on over 45 000 meteorites, including their chemical composition, their mass, and the year they were discovered and the corresponding location.</description>
+    </item>
     
     <item>
       <title>Viewing and analysing GPS traces with R</title>
