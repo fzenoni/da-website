@@ -6,11 +6,21 @@
     <description>Recent content in Meteorites on Data Analytics</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Altran</copyright>
-    <lastBuildDate>Mon, 12 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <copyright>Altran Belgium</copyright>
+    <lastBuildDate>Fri, 16 Mar 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/meteorites/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Meteorites (2)</title>
+      <link>/2018/03/16/meteorites2/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/03/16/meteorites2/</guid>
+      <description>GitHub The code for the herein described process can also be freely downloaded from https://github.com/majvdvel/meteorites.
+ Introduction In the previous blog post, we talked about visualising the locations where meteorites struck Earth and we made some conclusions about the locations where these meteorites were found. What we didn’t touch upon yet is the meteorites’ mass. We will keep working with our cleaned meteorite data set, and we will aim to find out whether we can get some kind of mass distribution, and if we can use the meteorites’ mass in a global visualisation.</description>
+    </item>
     
     <item>
       <title>Meteorites (1)</title>
