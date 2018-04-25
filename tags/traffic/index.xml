@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Traffic on Data Analytics</title>
+    <link>/tags/traffic/</link>
+    <description>Recent content in Traffic on Data Analytics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Altran Belgium</copyright>
+    <lastBuildDate>Mon, 23 Apr 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/traffic/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Traffic and accidents in the United Kingdom</title>
+      <link>/2018/04/23/ukaccidents/</link>
+      <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/04/23/ukaccidents/</guid>
+      <description>In this blog post, we analyze accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.</description>
+    </item>
+    
+  </channel>
+</rss>

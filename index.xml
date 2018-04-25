@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Altran Belgium</copyright>
-    <lastBuildDate>Fri, 16 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Apr 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Traffic and accidents in the United Kingdom</title>
+      <link>/2018/04/23/ukaccidents/</link>
+      <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/04/23/ukaccidents/</guid>
+      <description>In this blog post, we analyze accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.</description>
+    </item>
     
     <item>
       <title>Meteorites (2)</title>
@@ -38,7 +47,7 @@
       <pubDate>Mon, 22 Jan 2018 00:00:00 +0100</pubDate>
       
       <guid>/page/about/</guid>
-      <description>About Altran As a global leader in Engineering and R&amp;amp;D services (ER&amp;amp;D), Altran offers its clients a new way to innovate by developing the products and services of tomorrow. Altran works alongside its clients on every link in the value chain of their project, from conception to industrialization. For over thirty years, the Altran Group has provided its expertise to key players in the Aerospace, Automotive, Defence, Energy, Finance, Life Sciences, Railway, and Telecoms sectors, among others.</description>
+      <description>About Altran Group and Altran Belgium As a global leader in Engineering and R&amp;amp;D services (ER&amp;amp;D), Altran offers its clients a new way to innovate by developing the products and services of tomorrow. Altran works alongside its clients on every link in the value chain of their project, from conception to industrialization. For over thirty years, the Altran Group has provided its expertise to key players in the Aerospace, Automotive, Defence, Energy, Finance, Life Sciences, Railway, and Telecoms sectors, among others.</description>
     </item>
     
     <item>
