@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Traffic and accidents in the United Kingdom</title>
-        <meta name="description" content="In this blog post, we analyze accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.">
+        <meta name="description" content="In this blog post, we analyse accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python 3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
         <meta name="generator" content="Hugo 0.32.4" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Traffic and accidents in the United Kingdom">
-<meta property="og:description" content="In this blog post, we analyze accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.">
+<meta property="og:description" content="In this blog post, we analyse accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python 3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="/2018/04/23/ukaccidents/">
         <link rel="stylesheet" href="/dist/styles.css">
@@ -97,19 +97,19 @@ ga('send', 'pageview');
 
     
 
-<p>In this blog post, we analyze accidents and traffic data in the United Kingdom. The data are available for download on <a href="https://www.kaggle.com/daveianhickey/2000-16-traffic-flow-england-scotland-wales">kaggle</a> and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python3.6 and its modules <code>pandas</code>, <code>numpy</code>, <code>glob</code>, <code>folium</code> and <code>seaborn</code> we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.</p>
+<p>In this blog post, we analyse accidents and traffic data in the United Kingdom. The data are available for download on <a href="https://www.kaggle.com/daveianhickey/2000-16-traffic-flow-england-scotland-wales">kaggle</a> and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python 3.6 and its modules <code>pandas</code>, <code>numpy</code>, <code>glob</code>, <code>folium</code> and <code>seaborn</code> we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.</p>
 
 <p>In particular, we will compare trends in London, one of the major metropolitan areas in the world, to trends in the rest of the UK. We will also try to identify correlations between traffic demographics and accident rates. But let&rsquo;s get started.</p>
 
 <h2 id="introduction-to-the-datasets">Introduction to the datasets</h2>
 
-<p>To obtain the data, click on the download link on the dataset&rsquo;s page on kaggle. This downloads a zip file, which we assume has been extracted on the directory where the lines of code below are exectued.</p>
+<p>To obtain the data, click on the download link on the dataset&rsquo;s page on kaggle. This downloads a zip file, which we assume has been extracted in the directory where the lines of code below are exectued.</p>
 
 <pre><code class="language-python">import pandas as pd # contains definition of dataframe objects, analogous to R data.table package
 import numpy as np  # defines numerical operations on vectors and matrices, as well as functions. Defines arrays
 import glob         # allows to define list of files using regex
 
-# UPLOPAD THE ACCIDENT DATA
+# UPLOAD THE ACCIDENT DATA
 files_ls = glob.glob('accidents*csv') 
 
 dfs = []
@@ -122,7 +122,7 @@ df_acc = df_acc.reset_index(drop=True)
 # convert convertible columns to floats
 df_acc = df_acc.apply(pd.to_numeric, errors='ignore')
 
-# UPLOPAD THE TRAFFIC DATA
+# UPLOAD THE TRAFFIC DATA
 df_traffic = pd.read_csv(&quot;./ukTrafficAADF.csv&quot;, dtype='unicode')
 
 # convert convertible columns to floats
@@ -353,7 +353,7 @@ df_traffic = df_traffic.apply(pd.to_numeric, errors='ignore')
 </div>
 </div>
 
-<p>The accidents data contains 33 columns, many of which are not really useful for our purposes. For instance the first 2 columns contain accidents points locations in Easting and Northing coordinates, a cartesian reference system that takes into account the shape of the Earth&rsquo;s surface in a particular region and allows for accurate distance measurements. We will not use them, working instaed with the usual Longitude and Latitude.</p>
+<p>The accidents data contains 33 columns, many of which are not really useful for our purposes. For instance the first 2 columns contain accidents points locations in Easting and Northing coordinates, a cartesian reference system that takes into account the shape of the Earth&rsquo;s surface in a particular region and allows for accurate distance measurements. We will not use them, working instead with the usual Longitude and Latitude.</p>
 
 <p>Looking at the summary statistics, one can identify outliers, for examples if the maximum or minimum of a given column is outside a reasonable range.</p>
 
@@ -642,7 +642,7 @@ heat_df['Weight'] = weights
 heat_df['Weight'] = heat_df['Weight'].astype(float)
 heat_df = heat_df.dropna(axis=0, subset=['Latitude', 'Longitude', 'Weight'])
 
-# List comprehension to make out list of lists
+# List comprehension to create list of lists
 heat_data = [[[row['Latitude'], row['Longitude']] 
               for index, row in heat_df[heat_df['Weight'] == i].iterrows()] 
              for i in hmap_weights]
@@ -661,7 +661,7 @@ map_london
 
 df_traffic_london = df_traffic[df_traffic['Region'] == 'London']
 
-# List comprehension to make out list of lists
+# List comprehension to create list of lists
 heat_data = [[[row['Lat'], row['Lon'], row[&quot;AllMotorVehicles&quot;]] 
               for index, row in df_traffic_london[df_traffic_london['AADFYear'] == i].iterrows()]
              for i in set(df_traffic_london.AADFYear)]
@@ -680,7 +680,7 @@ Nevertheless, it looks like there is a correlation between traffic jams and acci
 
 <h2 id="grouping-counting-and-plotting">Grouping, counting and plotting</h2>
 
-<p>As in <code>R</code> with <code>data.table</code>, <code>pandas</code>&rsquo; dataframe incorporates many SQL-like functionalities. For instance we can count accidents grouped by severity, on a scale ranging from 1 to 3, 1 being fatal, 2 serious and 3 slight, and plot their evolution. Let us do this for London and for the whole of the UK separately, and display the plots next to each other:</p>
+<p>As in <code>R</code> with <code>data.table</code>, <code>pandas</code>&rsquo; dataframe incorporates many SQL-like functionalities. For instance we can count accidents grouped by severity on a scale ranging from 1 to 3: 1 being fatal, 2 serious and 3 slight, and plot their evolution. Let us do this for London and for the whole of the UK separately, and display the plots next to each other:</p>
 
 <pre><code class="language-python">import matplotlib.pyplot as plt
 import seaborn as sns
@@ -706,7 +706,7 @@ plt.subplot(1, 2, 2)
 bplot = sns.barplot(x = &quot;Year&quot;, y = &quot;counts&quot;, hue = &quot;Accident_Severity&quot;, data = grp_uk)
 bplot.set_title(&quot;Count of accidents by year and by severity in the UK&quot;)
 bplot.set_ylabel(&quot;&quot;)
-# Put the legend out of the figure
+# Place the legend out of the figure
 bplt = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 </code></pre>
 
@@ -780,7 +780,7 @@ bplt = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 <p><img src="output_15_0.png" alt="png" /></p>
 
-<p>Casualty numbers tell the same story as the accident severity plots. On the one hand, London has a lower share of casualties compared to its population than the UK. On the other hand, the trend is towards decreasing numbers in the UK, while in London numbers seem to be randomly fluctuating. And, we confirm that 2012 was a bad year&hellip; Are Olympics bad for the health?</p>
+<p>Casualty numbers tell the same story as the accident severity plots. On the one hand, London has a lower share of casualties compared to its population than the UK. On the other hand, the trend is towards decreasing numbers in the UK, while in London numbers seem to be randomly fluctuating. And, we confirm that 2012 was a bad year&hellip; Are the Olympics bad for your health?</p>
 
 <p>Let&rsquo;s now have a look at the number of accidents by posted speed limit on the accident&rsquo;s streets. Are we going to see again the same trends?</p>
 
@@ -815,7 +815,7 @@ bplt = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 <p><img src="output_17_0.png" alt="png" /></p>
 
-<p>Yes we are. But we also learn something new: most of the accidents in London happen on streets with speed limit of 30 miles per hour. This is probably due to the fact that most streets in London have that speed limit. The same is true in the whole of the UK, but quite a few accidents happen also on faster roads. Is there a correlation between the speed limit and the severity of the accidents?</p>
+<p>Yes we are. But we also learn something new: most of the accidents in London happen on streets a with speed limit of 30 miles per hour. This is probably due to the fact that most streets in London have that speed limit. The same is true in the whole of the UK, but quite a few accidents happen also on faster roads. Is there a correlation between the speed limit and the severity of the accidents?</p>
 
 <pre><code class="language-python"># accident severity and speed limit in London
 grp_london = df_london.groupby([&quot;Speed_limit&quot;, &quot;Accident_Severity&quot;])
@@ -867,7 +867,7 @@ bplt = plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
 <p>To conclude, let us turn our attention to the relation between traffic and accidents. Can we predict the number of accidents based solely on the number of cars on the road? Or is there a more subtle relation, perhaps with more factors coming into play?</p>
 
-<p>The traffic data available contains the number of vehicles on the road by type of vehicles. Without trying to understand what the name of each vehicle category corresponds to, we can plot the number of vehicles on the road per category and try to visualise if it is a good proxy for the number of accidents:</p>
+<p>The traffic data available contains the number of vehicles on the road, sorted by type. Without trying to understand what the name of each vehicle category corresponds to, we can plot the number of vehicles on the road per category and try to visualise if it is a good proxy for the number of accidents:</p>
 
 <pre><code class="language-python"># number of accidents
 acc_london = df_london.groupby(&quot;Year&quot;)
@@ -918,7 +918,7 @@ bplot.set_ylabel(&quot;&quot;)
 bplot.legend_.remove()
 
 plt.subplot(2, 1, 2)
-bplot = sns.barplot(x = &quot;Year&quot;, y = &quot;l2&quot;, hue = &quot;l1&quot;, palette=&quot;BuGn_d&quot;, 
+bplot = sns.barplot(x = &quot;Year&quot;, y = &quot;l2&quot;, hue = &quot;l1&quot;, palette=bar_palette, 
                     data = uk_barplot)
 bplot.set_title(&quot;Accidents vs vehicles on the road in the UK&quot;)
 bplot.set_xlabel(&quot;Year&quot;)
