@@ -18,7 +18,7 @@
       <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/04/23/ukaccidents/</guid>
-      <description>In this blog post, we analyse accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using Python 3.6 and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.</description>
+      <description>In this blog post, we analyse accidents and traffic data in the United Kingdom. The data are available for download on kaggle and contain UK government records of traffic from 2000 to 2016, as well as accidents recorded between 2005-2007 and 2009-2014. Using python and its modules pandas, numpy, glob, folium and seaborn we will visualise different aspects of the data and try to get some insight into trends and evolution of accidents and traffic in the UK.</description>
     </item>
     
     <item>
