@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Altran Belgium</copyright>
-    <lastBuildDate>Mon, 23 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 31 May 2018 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/tags/kaggle/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>London accidents and spatial analysis</title>
+      <link>/2018/05/31/london_spatial_analysis/</link>
+      <pubDate>Thu, 31 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/05/31/london_spatial_analysis/</guid>
+      <description>GitHub The code for the herein described process can also be freely downloaded from https://github.com/fzenoni/london-accidents.
+ “He didn’t notice that the lights had changed” Besides being able to “put dots on a map”, R can be used in very interesting ways for spatial analytics. Last month, Stefano performed some descriptive statistics on a Kaggle dataset that includes 9 years of UK accidents.</description>
+    </item>
     
     <item>
       <title>Traffic and accidents in the United Kingdom</title>
