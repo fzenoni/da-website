@@ -2,6 +2,6 @@
 # Except this file
 !.gitignore
 *.csv
-*.geojson
 *.Rds
 *.rds
+*.geojson
