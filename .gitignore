@@ -1,7 +1,6 @@
-# Ignore all files in this directory
 # Except this file
 !.gitignore
-*.csv
 *.Rds
 *.rds
 *.geojson
+*.csv
