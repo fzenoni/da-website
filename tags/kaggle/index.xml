@@ -65,11 +65,11 @@ data &amp;lt;- data[!duplicated(data)]&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The first one is &lt;code&gt;sf::read_sf()&lt;/code&gt;.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;system.time(sf::read_sf(&amp;#39;london-accidents-data/Local_Authority_Districts_Dec_2016.geojson&amp;#39;))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;##    user  system elapsed 
-##   8.067   0.651   9.098&lt;/code&gt;&lt;/pre&gt;
+##   7.690   0.611   8.606&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;But the freshest discovery is in fact the &lt;code&gt;geojsonsf::geojson_sf()&lt;/code&gt; function from SymbolixAU (check their blog post post &lt;a href=&#34;https://www.symbolix.com.au/blog-main/2018-3&#34;&gt;here&lt;/a&gt;), that serves exactly our purpose, in an even faster way than &lt;code&gt;sf&lt;/code&gt;’s method.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;system.time(map &amp;lt;- geojsonsf::geojson_sf(&amp;#39;london-accidents-data/Local_Authority_Districts_Dec_2016.geojson&amp;#39;))&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;##    user  system elapsed 
-##   2.596   0.190   3.607&lt;/code&gt;&lt;/pre&gt;
+##   2.334   0.153   3.166&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Let’s quickly inspect the &lt;code&gt;map&lt;/code&gt; object.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(map)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## Simple feature collection with 6 features and 10 fields

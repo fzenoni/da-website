@@ -8,7 +8,7 @@
  “He didn’t notice that the lights had changed” Besides being able to “put dots on a map”, R can be used in very interesting ways for spatial analytics. Last month, Stefano performed some descriptive statistics on a Kaggle dataset that includes 9 years of UK accidents.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.28" />
+        <meta name="generator" content="Hugo 0.32.4" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="London accidents and spatial analysis">
@@ -144,11 +144,11 @@ data &lt;- data[!duplicated(data)]</code></pre>
 <p>The first one is <code>sf::read_sf()</code>.</p>
 <pre class="r"><code>system.time(sf::read_sf(&#39;london-accidents-data/Local_Authority_Districts_Dec_2016.geojson&#39;))</code></pre>
 <pre><code>##    user  system elapsed 
-##   8.067   0.651   9.098</code></pre>
+##   7.690   0.611   8.606</code></pre>
 <p>But the freshest discovery is in fact the <code>geojsonsf::geojson_sf()</code> function from SymbolixAU (check their blog post post <a href="https://www.symbolix.com.au/blog-main/2018-3">here</a>), that serves exactly our purpose, in an even faster way than <code>sf</code>’s method.</p>
 <pre class="r"><code>system.time(map &lt;- geojsonsf::geojson_sf(&#39;london-accidents-data/Local_Authority_Districts_Dec_2016.geojson&#39;))</code></pre>
 <pre><code>##    user  system elapsed 
-##   2.596   0.190   3.607</code></pre>
+##   2.334   0.153   3.166</code></pre>
 <p>Let’s quickly inspect the <code>map</code> object.</p>
 <pre class="r"><code>head(map)</code></pre>
 <pre><code>## Simple feature collection with 6 features and 10 fields
