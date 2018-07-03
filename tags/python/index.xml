@@ -20,7 +20,7 @@
       <guid>/2018/07/03/mnist/</guid>
       <description>
 
-&lt;p&gt;It is well known that neural networks have been extremenly succesful at cracking problems previously thought to be intractable.
+&lt;p&gt;It is well known that neural networks have been extremenly successful at cracking problems previously thought to be intractable.
 The recently announced google assistant&amp;rsquo;s ability to book restaurants and hairdresser appointments is just the last on the list of the numerous achievements of neural networks. In this blog post, I want to emphasize the fact that deep learning is not always a necessity and often nearly as precise predictions can be achieved with simpler, more transparent and less computationally expensive algorithms. To this end we will try to crack handwritten digits recognition without neural networks.
 We will use the MNIST database, a well known and extensively used database of handwritten digits. You can download it here: &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34;&gt;http://yann.lecun.com/exdb/mnist/&lt;/a&gt;. On the same site, the performance of different classifiers is reported, including neural nets. So, clearly what I will illustrate in this blog post is not new (this is usually the case in machine learning), but still worth my time (and I hope yours).&lt;/p&gt;
 
@@ -884,7 +884,7 @@ df_error_shares
 
 &lt;h2 id=&#34;conclusions&#34;&gt;Conclusions&lt;/h2&gt;
 
-&lt;p&gt;We have seen how five different learning algorithms without nets can do a good job at identigying handwriten digits. Two of them, logistic regression and knn, benefit from a preliminary PCA applied to the feature vectors, whereas the others, random forest, svm and gbm, give the best results on the full feature vectors. Our best model is an average of 7 models, at 97.23% accuracy. SVM can go up to 99.44%, as documented &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34;&gt;here&lt;/a&gt;. With neural networks, the accuracy can be as high as 99.65%, presumably with a considerable effort.&lt;/p&gt;
+&lt;p&gt;We have seen how five different learning algorithms without nets can do a good job at identifying handwritten digits. Two of them, logistic regression and knn, benefit from a preliminary PCA applied to the feature vectors, whereas the others, random forest, svm and gbm, give the best results on the full feature vectors. Our best model is an average of 7 models, at 97.23% accuracy. SVM can go up to 99.44%, as documented &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34;&gt;here&lt;/a&gt;. With neural networks, the accuracy can be as high as 99.65%, presumably with a considerable effort.&lt;/p&gt;
 
 &lt;h2 id=&#34;acknowledgements&#34;&gt;Acknowledgements&lt;/h2&gt;
 
