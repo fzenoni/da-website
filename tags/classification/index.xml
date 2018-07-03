@@ -1,0 +1,896 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Classification on Data Analytics</title>
+    <link>/tags/classification/</link>
+    <description>Recent content in Classification on Data Analytics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Altran Belgium</copyright>
+    <lastBuildDate>Tue, 03 Jul 2018 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/tags/classification/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Deciphering handwritten digits without nets</title>
+      <link>/2018/07/03/mnist/</link>
+      <pubDate>Tue, 03 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/07/03/mnist/</guid>
+      <description>
+
+&lt;p&gt;It is well known that neural networks have been extremenly succesful at cracking problems previously thought to be untractable.
+The recently announced google assistant&amp;rsquo;s ability to book restaurants and hairdresser appointments is just the last on the list of the numerous achievements of neural networks. In this blog post, I want to emphasize the fact that deep learning is not always a necessity and often nearly as precise predictions can be achieved with simpler, more transparent and less computationally expensive algorithms. To this end we will try to crack handwritten digits recognition without neural networks.
+We will use the MNIST database, a well known and extensively used database of handwritten digits. You can download it here: &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34;&gt;http://yann.lecun.com/exdb/mnist/&lt;/a&gt;. On the same site, the performance of different classifiers is reported, including neural nets. So, clearly what I will illustrate in this blog post is not new (this is usually the case in machine learning), but still worth my time (and I hope yours).&lt;/p&gt;
+
+&lt;h2 id=&#34;python-get-the-data&#34;&gt;Python, get the data!&lt;/h2&gt;
+
+&lt;p&gt;The MNIST database is so popular that it comes with the &lt;code&gt;sklearn&lt;/code&gt; module of python. To get it, I just need to call the function &lt;code&gt;fetch_mldata&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.datasets import fetch_mldata
+mnist = fetch_mldata(&#39;MNIST original&#39;, data_home=&amp;quot;./&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This downloads the data in the specified local path, as a .mat file, and loads it into the python environment. The images are 70000, with a resolution of 28x28 pixels, ready to go into a machine learning pipeline. Here a few examples:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(16,4));
+
+# image 0
+plt.subplot(1, 4, 1);
+plt.imshow(mnist.data[0].reshape(28,28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+
+# image 1
+plt.subplot(1, 4, 2);
+plt.imshow(mnist.data[10000].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+
+# image 2
+plt.subplot(1, 4, 3);
+plt.imshow(mnist.data[15000].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+
+# image 3
+plt.subplot(1, 4, 4);
+plt.imshow(mnist.data[20000].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;MNIST/output_3_0.png&#34; alt=&#34;png&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;pre-processing&#34;&gt;Pre-processing&lt;/h2&gt;
+
+&lt;p&gt;The database is clean, in the sense that all elements are handwritten digits. So we do not have to worry about data cleaning, often considered to be 80% of the data scientist&amp;rsquo;s job. Instead, we can directly start pre-processing.&lt;/p&gt;
+
+&lt;h3 id=&#34;traininig-and-testing&#34;&gt;Traininig and testing&lt;/h3&gt;
+
+&lt;p&gt;The first step is to divide the data into training and test sets. As their names suggest, the former is used to train predictive models, whereas the latter is used to test their performance. Even better practice would be to use k-fold validation: divide the dataset into k equally sized subsets, and train k different models, each tested with a different subset. The final model is the average of those. The clear advantage of this method is that the resulting model generalizes better: its predictions are better with new data. However, it is time consuming and not necessary for this blog&amp;rsquo;s post purposes.&lt;/p&gt;
+
+&lt;p&gt;For us, a good compromise is to keep 60000 images in the training set and 10000 images in the test set. We can do this using the &lt;code&gt;train_test_split&lt;/code&gt; function of &lt;code&gt;sklearn&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.model_selection import train_test_split
+# divide the data into train and test sets, with a proportion of 6:1
+train_img, test_img, train_lbl, test_lbl = train_test_split(mnist.data, 
+                                                            mnist.target, 
+                                                            test_size=1/7.0,
+                                                            random_state=0)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;rescaling&#34;&gt;Rescaling&lt;/h3&gt;
+
+&lt;p&gt;Next, we have to rescale the feature vectors. This is a very important step as it can increase dramatically the performance of the classifier.
+The function &lt;code&gt;StandardScaler&lt;/code&gt; of &lt;code&gt;sklearn&lt;/code&gt; does so by subtracting from each vector the mean and dividing by the standard deviation of the train dataset:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.preprocessing import StandardScaler
+import warnings; warnings.simplefilter(&#39;ignore&#39;)
+
+scaler = StandardScaler()
+# Fit on training set only
+scaler.fit(train_img)
+# Apply transform to both the training set and the test set
+train_img = scaler.transform(train_img)
+test_img = scaler.transform(test_img)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;dimensionality-reduction&#34;&gt;Dimensionality reduction&lt;/h3&gt;
+
+&lt;p&gt;Before feeding the data to our favourite machine learning algorithms, there is a last step that can help achieve better performance. The images come as vectors of dimension 784, so already as respectable feature vectors. However, it could be that not all of these dimensions contain relevant information. For instance, the pixels in the corners are likely to always be empty, as the figures above show. To avoid carrying over unnecessary information we can use Principal Component Analysis, a technique well known in statistical analysis that roughly consists in finding a rotation in the feature vectors&amp;rsquo; space such that the variance of the data projected into the first principal component is maximal, and decreases monothonically for all other principal components.
+As you might have guessed, &lt;code&gt;sklearn&lt;/code&gt; has a function for that. As an argument to the function, it is possible to state the amount of the variance (i.e. information) that we want to keep in our feature vectors. We will try different options: 95%, 90% and 50% of the variance.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.decomposition import PCA
+# apply PCA with different variance thresholds
+pca95 = PCA(.95)
+pca95.fit(train_img)
+
+pca90 = PCA(.90)
+pca90.fit(train_img)
+
+pca50 = PCA(.50)
+pca50.fit(train_img)
+
+pca95_train_img = pca95.transform(train_img)
+pca95_test_img = pca95.transform(test_img)
+
+pca90_train_img = pca90.transform(train_img)
+pca90_test_img = pca90.transform(test_img)
+
+pca50_train_img = pca50.transform(train_img)
+pca50_test_img = pca50.transform(test_img)
+
+[pca95.n_components_, pca90.n_components_, pca50.n_components_]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;[330, 236, 39]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It turns out that 95% of the information is contained in only 330 dimensions, 90% in 236 and 50% in 39! It is important to notice that the results of Principal Component Analysis are not independent of the rescaling: applying PCA before or after rescaling, or rescaling differently, would have given different results. However, it is a great tool for feature preparation, if used responsibly.
+Now let&amp;rsquo;s illustrate the effect of PCA by plotting the same image before and after these transformations. To do this, we need to rotate the feature vectors back to their original axes and revert the scaling:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;res95_train_img = pca95.inverse_transform(pca95_train_img)
+res90_train_img = pca90.inverse_transform(pca90_train_img)
+res50_train_img = pca50.inverse_transform(pca50_train_img)
+
+res95_train_img = scaler.inverse_transform(res95_train_img)
+res90_train_img = scaler.inverse_transform(res90_train_img)
+res50_train_img = scaler.inverse_transform(res50_train_img)
+
+res100_train_img = scaler.inverse_transform(train_img)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(16,4));
+
+# Original Image
+plt.subplot(1, 4, 1);
+plt.imshow(res100_train_img[1].reshape(28,28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.xlabel(&#39;784 components&#39;, fontsize = 14)
+plt.title(&#39;Original Image&#39;, fontsize = 14);
+
+# 330 principal components
+plt.subplot(1, 4, 2);
+plt.imshow(res95_train_img[1].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.xlabel(&#39;330 components&#39;, fontsize = 14)
+plt.title(&#39;95% of Variance&#39;, fontsize = 14);
+
+# 236 principal components
+plt.subplot(1, 4, 3);
+plt.imshow(res90_train_img[1].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.xlabel(&#39;236 components&#39;, fontsize = 14)
+plt.title(&#39;90% of Variance&#39;, fontsize = 14);
+
+# 39 principal components
+plt.subplot(1, 4, 4);
+plt.imshow(res50_train_img[1].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.xlabel(&#39;39 components&#39;, fontsize = 14)
+plt.title(&#39;50% of Variance&#39;, fontsize = 14);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;MNIST/output_12_0.png&#34; alt=&#34;png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As expected, leaving out information leads to increasingly blurred images.&lt;/p&gt;
+
+&lt;p&gt;Another way to illustrate the effect of PCA is to look at the scatter plot of the different digits in feature space, before and after the rotation to the principal compenents. Using  the &lt;code&gt;seaborn&lt;/code&gt; and &lt;code&gt;pandas&lt;/code&gt; modules, we can conveniently gather the data into a single dataframe and plot it as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import seaborn as sns
+import pandas as pd
+
+rng = list(range(99))
+mrks = [&amp;quot;$0$&amp;quot;, &amp;quot;$1$&amp;quot;, &amp;quot;$2$&amp;quot;, &amp;quot;$3$&amp;quot;, &amp;quot;$4$&amp;quot;, &amp;quot;$5$&amp;quot;, &amp;quot;$6$&amp;quot;, &amp;quot;$7$&amp;quot;, &amp;quot;$8$&amp;quot;, &amp;quot;$9$&amp;quot;]
+
+df1 = pd.DataFrame({&amp;quot;x&amp;quot; : pca95_train_img[rng,0],
+                    &amp;quot;y&amp;quot; : pca95_train_img[rng,1],
+                    &amp;quot;label&amp;quot; : train_lbl[rng],
+                    &amp;quot;PCA&amp;quot; : &amp;quot;yes&amp;quot;})
+df2 = pd.DataFrame({&amp;quot;x&amp;quot; : 7.5*train_img[rng,370],
+                    &amp;quot;y&amp;quot; : 7.5*train_img[rng,371],
+                    &amp;quot;label&amp;quot; : train_lbl[rng],
+                    &amp;quot;PCA&amp;quot; : &amp;quot;no&amp;quot;})
+
+df_plot = pd.concat([df1, df2])
+
+plot = sns.lmplot(x=&amp;quot;x&amp;quot;, 
+                  y=&amp;quot;y&amp;quot;,  
+                  data=df_plot, 
+                  fit_reg=False, 
+                  hue=&#39;label&#39;, 
+                  markers=mrks, 
+                  legend = False,
+                  col=&amp;quot;PCA&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;MNIST/output_14_0.png&#34; alt=&#34;png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The plot on the left shows the first two principal components, which account for nearly 10% of the total variance. Compared to the plot on the right, that shows two central pixels of the original feature vectors (rescaled for illustration purposes), it is striking that after PCA, the feature vectors seem to occupy more uniformly the feature space. Also, already with 10% of the variance, we can distinguish the zeros on the lower right corner, and the sevens in the upper left corner.&lt;/p&gt;
+
+&lt;h2 id=&#34;learning-to-distinguish-digits&#34;&gt;Learning to distinguish digits&lt;/h2&gt;
+
+&lt;p&gt;We are now ready to train some models for handwritten digits recognition. The aim isn&amp;rsquo;t to come up with the best performance, but rather to show that surprisingly good performance can be attained with very little effort. We will use 4 different models: logistic regression, random forest, support vector machine and gradient boosting machine.&lt;/p&gt;
+
+&lt;h3 id=&#34;logistic-regression&#34;&gt;Logistic regression&lt;/h3&gt;
+
+&lt;p&gt;Simpler things first. Logistic regression is a very simple classification algorithm and probably the first one should try. Let us train classifiers with the previously prepared feature vectors: do we need 100% of the information or do we get better performance leaving some combination of pixels out?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.linear_model import LogisticRegression
+# all parameters not specified are set to their defaults
+# default solver is incredibly slow which is why it was changed to &#39;lbfgs&#39;
+
+lr1 = LogisticRegression(solver = &#39;lbfgs&#39;)
+lr1.fit(train_img, train_lbl)
+lr100 = lr1.score(test_img, test_lbl)
+
+lr2 = LogisticRegression(solver = &#39;lbfgs&#39;)
+lr2.fit(pca95_train_img, train_lbl)
+lr95 = lr2.score(pca95_test_img, test_lbl)
+
+lr3 = LogisticRegression(solver = &#39;lbfgs&#39;)
+lr3.fit(pca90_train_img, train_lbl)
+lr90 = lr3.score(pca90_test_img, test_lbl)
+
+lr4 = LogisticRegression(solver = &#39;lbfgs&#39;)
+lr4.fit(pca50_train_img, train_lbl)
+lr50 = lr4.score(pca50_test_img, test_lbl)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_lr = pd.DataFrame({&amp;quot;% of variance&amp;quot; : [100, 95, 90, 50],
+                      &amp;quot;dimension of feature vector&amp;quot; : [784, pca95.n_components_, pca90.n_components_, pca50.n_components_],
+                      &amp;quot;performance&amp;quot; : [lr100, lr95, lr90, lr50]})
+
+df_lr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;% of variance&lt;/th&gt;
+      &lt;th&gt;dimension of feature vector&lt;/th&gt;
+      &lt;th&gt;performance&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;784&lt;/td&gt;
+      &lt;td&gt;0.9157&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;95&lt;/td&gt;
+      &lt;td&gt;330&lt;/td&gt;
+      &lt;td&gt;0.9201&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;90&lt;/td&gt;
+      &lt;td&gt;236&lt;/td&gt;
+      &lt;td&gt;0.9168&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;50&lt;/td&gt;
+      &lt;td&gt;39&lt;/td&gt;
+      &lt;td&gt;0.8861&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The table above summarizes our findings. All models are close to 90% accuracy, a very good result given the amount of effort that we put in. Keeping 95% of the variance gives the best performance, with 92% accuracy. This proves the usefulness of Principal Component analysis: it can help train models that generalise better.&lt;/p&gt;
+
+&lt;h3 id=&#34;k-nearest-neighbours&#34;&gt;K-nearest neighbours&lt;/h3&gt;
+
+&lt;p&gt;K-nearest neighbours (knn) is another simple algorithm that deserves a try early in the model building process. It works by assigning a new data point to the class that is most common amongst its k nearest neighbours. In its simplest form, the k neighbours are assigned the same weighting and the distance is computed using the euclidean metric in feature space. But all these are hyperparameters that one could fit to improve the model&amp;rsquo;s performance. Here, we choose to consider 5 neighbours with equal weights:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.neighbors import KNeighborsClassifier
+
+knn1 = KNeighborsClassifier(n_neighbors=5)
+knn1.fit(train_img, train_lbl)
+knn100 = knn1.score(test_img, test_lbl)
+
+knn2 = KNeighborsClassifier(n_neighbors=5)
+knn2.fit(pca95_train_img, train_lbl)
+knn95 = knn2.score(pca95_test_img, test_lbl)
+
+knn3 = KNeighborsClassifier(n_neighbors=5)
+knn3.fit(pca90_train_img, train_lbl)
+knn90 = knn3.score(pca90_test_img, test_lbl)
+
+knn4 = KNeighborsClassifier(n_neighbors=5)
+knn4.fit(pca50_train_img, train_lbl)
+knn50 = knn4.score(pca50_test_img, test_lbl)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_knn = pd.DataFrame({&amp;quot;% of variance&amp;quot; : [100, 95, 90, 50],
+                       &amp;quot;dimension of feature vector&amp;quot; : [784, pca95.n_components_, pca90.n_components_, pca50.n_components_],
+                       &amp;quot;performance&amp;quot; : [knn100, knn95, knn90, knn50]})
+
+df_knn
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;% of variance&lt;/th&gt;
+      &lt;th&gt;dimension of feature vector&lt;/th&gt;
+      &lt;th&gt;performance&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;784&lt;/td&gt;
+      &lt;td&gt;0.9481&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;95&lt;/td&gt;
+      &lt;td&gt;330&lt;/td&gt;
+      &lt;td&gt;0.9497&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;90&lt;/td&gt;
+      &lt;td&gt;236&lt;/td&gt;
+      &lt;td&gt;0.9535&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;50&lt;/td&gt;
+      &lt;td&gt;39&lt;/td&gt;
+      &lt;td&gt;0.9592&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;As can be seen in the table above, knn also benefits from feature preparation with PCA. In fact, the best performing model is the one trained with only 50% of the information, and performs quite well, at nearly 96% accuracy!&lt;/p&gt;
+
+&lt;h3 id=&#34;random-forest&#34;&gt;Random forest&lt;/h3&gt;
+
+&lt;p&gt;Random forest is a very popular algorithm. Its name derives from the fact that it trains a collection of decision trees, each trained with a different subset of the training set and of the feature vectors. It is a very robust model, that does the feature selection for you. For this reason, PCA is less useful in this case, but let&amp;rsquo;s see if nevertheless it allows to improve the model&amp;rsquo;s performance:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn.ensemble import RandomForestClassifier
+
+rf1 = RandomForestClassifier(max_features=35, max_depth=1000, random_state=0)
+rf1.fit(train_img, train_lbl)
+rf100 = rf1.score(test_img, test_lbl)
+
+rf2 = RandomForestClassifier(max_features=35, max_depth=1000, random_state=0)
+rf2.fit(pca95_train_img, train_lbl)
+rf95 = rf2.score(pca95_test_img, test_lbl)
+
+rf3 = RandomForestClassifier(max_features=35, max_depth=1000, random_state=0)
+rf3.fit(pca90_train_img, train_lbl)
+rf90 = rf3.score(pca90_test_img, test_lbl)
+
+rf4 = RandomForestClassifier(max_features=35, max_depth=1000, random_state=0)
+rf4.fit(pca50_train_img, train_lbl)
+rf50 = rf4.score(pca50_test_img, test_lbl)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_rf = pd.DataFrame({&amp;quot;% of variance&amp;quot; : [100, 95, 90, 50],
+                          &amp;quot;dimension of feature vector&amp;quot; : [784, pca95.n_components_, pca90.n_components_, pca50.n_components_],
+                          &amp;quot;performance&amp;quot; : [rf100, rf95, rf90, rf50]})
+
+df_rf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;% of variance&lt;/th&gt;
+      &lt;th&gt;dimension of feature vector&lt;/th&gt;
+      &lt;th&gt;performance&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;784&lt;/td&gt;
+      &lt;td&gt;0.9514&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;95&lt;/td&gt;
+      &lt;td&gt;330&lt;/td&gt;
+      &lt;td&gt;0.9048&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;90&lt;/td&gt;
+      &lt;td&gt;236&lt;/td&gt;
+      &lt;td&gt;0.9129&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;50&lt;/td&gt;
+      &lt;td&gt;39&lt;/td&gt;
+      &lt;td&gt;0.9174&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;As anticipated, PCA does not help with improving the model here. The good news is that we reach over 95% accuracy without even doing a PCA! That is one of the biggest strengths of random forests: they generalize very well, with little effort.&lt;/p&gt;
+
+&lt;h3 id=&#34;support-vector-machine&#34;&gt;Support vector machine&lt;/h3&gt;
+
+&lt;p&gt;Support vector machine (SVM) is based on geometric considerations: it identifies classes regions in feature space based on the notion of maximal distance between classes. Using suitable chosen kernel functions, it is possible to identify non-linearly separated classes and even classes in an infinite space.
+Let&amp;rsquo;s see how PCA affects the SVM classifier:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from sklearn import svm
+
+clf1 = svm.SVC()
+clf1.fit(train_img, train_lbl)
+svm100 = clf1.score(test_img, test_lbl)
+
+clf2 = svm.SVC()
+clf2.fit(pca95_train_img, train_lbl)
+svm95 = clf2.score(pca95_test_img, test_lbl)
+
+clf3 = svm.SVC()
+clf3.fit(pca90_train_img, train_lbl)
+svm90 = clf3.score(pca90_test_img, test_lbl)
+
+clf4 = svm.SVC()
+clf4.fit(pca50_train_img, train_lbl)
+svm50 = clf4.score(pca50_test_img, test_lbl)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_svm = pd.DataFrame({&amp;quot;% of variance&amp;quot; : [100, 95, 90, 50],
+                          &amp;quot;dimension of feature vector&amp;quot; : [784, pca95.n_components_, pca90.n_components_, pca50.n_components_],
+                          &amp;quot;performance&amp;quot; : [svm100, svm95, svm90, svm50]})
+
+df_svm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;% of variance&lt;/th&gt;
+      &lt;th&gt;dimension of feature vector&lt;/th&gt;
+      &lt;th&gt;performance&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;784&lt;/td&gt;
+      &lt;td&gt;0.9642&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;95&lt;/td&gt;
+      &lt;td&gt;330&lt;/td&gt;
+      &lt;td&gt;0.9619&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;90&lt;/td&gt;
+      &lt;td&gt;236&lt;/td&gt;
+      &lt;td&gt;0.9597&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;50&lt;/td&gt;
+      &lt;td&gt;39&lt;/td&gt;
+      &lt;td&gt;0.8945&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The best performing model is the one trained with all the information, with over 96% accuracy. This is a great result, considering that we used the defaults hyperparamenters of SVM. Tuning them, would presumably considerably increase the performance. Furthermore, PCA does not seem to help: the less information we keep, the worst the perfomance, although it does not decrease by much between 100%, 95% and 90%. Such small differences are not conclusive: perhaps with new data, things would change.&lt;/p&gt;
+
+&lt;h3 id=&#34;gradient-boosting-machine&#34;&gt;Gradient boosting machine&lt;/h3&gt;
+
+&lt;p&gt;Gradient boosting machine (gbm) is a relatively new and really cool learning algorithm. It&amp;rsquo;s strategy relies on minizing the prediction errors (residuals) by fitting first a simple model to the data, such as a logistic regression, and then fitting another model to the residuals of the first model, that is the difference between predictions and ground truth. Then, the sum of these two models is taken and the previous step is repeated. This process goes on until the residuals stop improving: no meaningful pattern can be fit to them. Given the complexity of this model, it usually takes a while to train and does not benefit much from PCA. For these reasons I decided to train the model only once, with the full feature vectors. I will the &lt;code&gt;XGBClassifier&lt;/code&gt; from &lt;code&gt;xgboost&lt;/code&gt;, a version of gbm optimized for performance. Let&amp;rsquo;s see:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from xgboost import XGBClassifier
+
+# fit model no training data
+xgb = XGBClassifier()
+xgb.fit(train_img, train_lbl)
+xgb100 = xgb.score(test_img, test_lbl)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;xgb100
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;0.9339
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We get nearly 93.4% accuracy, not the best score so far but still pretty good. The &lt;code&gt;XGBClassifier&lt;/code&gt; default settings use a decision tree model to fit the data and residuals, with specific choices of many parameters. So, presumably there is still a large margin of improvement!&lt;/p&gt;
+
+&lt;h2 id=&#34;putting-it-all-together&#34;&gt;Putting it all together&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s summarize our findings in a single table:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_sum = pd.DataFrame({&amp;quot;% of variance&amp;quot; : [100, 95, 90, 50],
+                       &amp;quot;dimension of feature vector&amp;quot; : [784, pca95.n_components_, pca90.n_components_, pca50.n_components_],
+                       &amp;quot;logistic regression&amp;quot; : [lr100, lr95, lr90, lr50],
+                       &amp;quot;k-nearest neighbours&amp;quot; : [knn100, knn95, knn90, knn50],
+                       &amp;quot;random forest&amp;quot; : [rf100, rf95, rf90, rf50],
+                       &amp;quot;support vector machine&amp;quot; : [svm100, svm95, svm90, svm50],
+                       &amp;quot;gradient boosting machine&amp;quot; : [xgb100, &amp;quot;--&amp;quot;, &amp;quot;--&amp;quot;, &amp;quot;--&amp;quot;]})
+
+df_sum
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;% of variance&lt;/th&gt;
+      &lt;th&gt;dimension of feature vector&lt;/th&gt;
+      &lt;th&gt;gradient boosting machine&lt;/th&gt;
+      &lt;th&gt;k-nearest neighbours&lt;/th&gt;
+      &lt;th&gt;logistic regression&lt;/th&gt;
+      &lt;th&gt;random forest&lt;/th&gt;
+      &lt;th&gt;support vector machine&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;784&lt;/td&gt;
+      &lt;td&gt;0.9339&lt;/td&gt;
+      &lt;td&gt;0.9481&lt;/td&gt;
+      &lt;td&gt;0.9157&lt;/td&gt;
+      &lt;td&gt;0.9514&lt;/td&gt;
+      &lt;td&gt;0.9642&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;95&lt;/td&gt;
+      &lt;td&gt;330&lt;/td&gt;
+      &lt;td&gt;--&lt;/td&gt;
+      &lt;td&gt;0.9497&lt;/td&gt;
+      &lt;td&gt;0.9201&lt;/td&gt;
+      &lt;td&gt;0.9048&lt;/td&gt;
+      &lt;td&gt;0.9619&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;90&lt;/td&gt;
+      &lt;td&gt;236&lt;/td&gt;
+      &lt;td&gt;--&lt;/td&gt;
+      &lt;td&gt;0.9535&lt;/td&gt;
+      &lt;td&gt;0.9168&lt;/td&gt;
+      &lt;td&gt;0.9129&lt;/td&gt;
+      &lt;td&gt;0.9597&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;50&lt;/td&gt;
+      &lt;td&gt;39&lt;/td&gt;
+      &lt;td&gt;--&lt;/td&gt;
+      &lt;td&gt;0.9592&lt;/td&gt;
+      &lt;td&gt;0.8861&lt;/td&gt;
+      &lt;td&gt;0.9174&lt;/td&gt;
+      &lt;td&gt;0.8945&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The best performing model is SVM with the full feature vectors. But this does not tell us much since we did not really try to optimize all these models. The takehome message is that we can go a long way with little effort.&lt;/p&gt;
+
+&lt;h3 id=&#34;let-them-vote&#34;&gt;Let them vote&lt;/h3&gt;
+
+&lt;p&gt;Perhaps we can get an increase in performance by putting together a few models and making them vote. Let&amp;rsquo;s select the 5 best models plus the best random forest and the gradient boosting machine. The reason for adding the last two is to use conceptually different models, that are likely to do different type of errors.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from statistics import mode
+
+pred_svm1 = clf1.predict(test_img)
+pred_svm2 = clf2.predict(pca95_test_img)
+pred_svm3 = clf3.predict(pca90_test_img)
+pred_knn4 = knn4.predict(pca50_test_img)
+pred_knn3 = knn3.predict(pca90_test_img)
+pred_rf = rf1.predict(test_img)
+pred_gbm = xgb.predict(test_img)
+
+df_predict = pd.DataFrame({&amp;quot;pred.svm1&amp;quot; : pred_svm1,
+                           &amp;quot;pred.svm2&amp;quot; : pred_svm2,
+                           &amp;quot;pred.svm3&amp;quot; : pred_svm3,
+                           &amp;quot;pred.knn4&amp;quot; : pred_knn4,
+                           &amp;quot;pred.knn3&amp;quot; : pred_knn3,
+                           &amp;quot;pred.rf&amp;quot; : pred_rf,
+                           &amp;quot;pred.gbm&amp;quot; : pred_gbm})
+
+df_predict[&amp;quot;predicted&amp;quot;] = df_predict.mode(axis=1)[0]
+df_predict[&amp;quot;actual&amp;quot;] = test_lbl
+           
+
+incorrect = df_predict[df_predict[&amp;quot;actual&amp;quot;] != df_predict[&amp;quot;predicted&amp;quot;]]
+
+1 - incorrect.shape[0]/df_predict.shape[0]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;0.9723
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We get to over 97.2%! Not bad, democracy helps.&lt;/p&gt;
+
+&lt;p&gt;A benchmark to assess this model is to compare it to a human&amp;rsquo;s performance. So let&amp;rsquo;s have a look at some of the errors that our best model did:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import warnings; warnings.simplefilter(&#39;ignore&#39;)
+
+test_img = scaler.inverse_transform(test_img)
+plt.figure(figsize=(16,4));
+
+# image 0
+plt.subplot(1, 4, 1);
+plt.imshow(test_img[incorrect.index.values[0]].reshape(28,28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.title(&#39;classified as &#39; + str(int(incorrect[&amp;quot;predicted&amp;quot;][[incorrect.index.values[0]]])), fontsize = 14);
+
+# image 1
+plt.subplot(1, 4, 2);
+plt.imshow(test_img[incorrect.index.values[1]].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.title(&#39;classified as &#39; + str(int(incorrect[&amp;quot;predicted&amp;quot;][[incorrect.index.values[1]]])), fontsize = 14);
+
+# image 2
+plt.subplot(1, 4, 3);
+plt.imshow(test_img[incorrect.index.values[2]].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.title(&#39;classified as &#39; + str(int(incorrect[&amp;quot;predicted&amp;quot;][[incorrect.index.values[2]]])), fontsize = 14);
+
+# image 3
+plt.subplot(1, 4, 4);
+plt.imshow(test_img[incorrect.index.values[3]].reshape(28, 28),
+              cmap = plt.cm.gray, interpolation=&#39;nearest&#39;,
+              clim=(0, 255));
+plt.title(&#39;classified as &#39; + str(int(incorrect[&amp;quot;predicted&amp;quot;][[incorrect.index.values[3]]])), fontsize = 14);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;MNIST/output_37_0.png&#34; alt=&#34;png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Arguably a human would still do a better job than our best model. But keep in mind that we did not try very hard to optimize the models, so perhaps we could eventually get better than the average human&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s have a look at the most common predicted classes amongst errors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_error_shares = pd.DataFrame({&amp;quot;as 0&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 0].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 1&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 1].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 2&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 2].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 3&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 3].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 4&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 4].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 5&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 5].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 6&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 6].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 7&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 7].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 8&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 8].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 9&amp;quot; : round(incorrect[incorrect[&amp;quot;predicted&amp;quot;] == 9].shape[0]/incorrect.shape[0],3)},
+                              index=[0])
+
+df_error_shares                 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;as 0&lt;/th&gt;
+      &lt;th&gt;as 1&lt;/th&gt;
+      &lt;th&gt;as 2&lt;/th&gt;
+      &lt;th&gt;as 3&lt;/th&gt;
+      &lt;th&gt;as 4&lt;/th&gt;
+      &lt;th&gt;as 5&lt;/th&gt;
+      &lt;th&gt;as 6&lt;/th&gt;
+      &lt;th&gt;as 7&lt;/th&gt;
+      &lt;th&gt;as 8&lt;/th&gt;
+      &lt;th&gt;as 9&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;0.051&lt;/td&gt;
+      &lt;td&gt;0.054&lt;/td&gt;
+      &lt;td&gt;0.188&lt;/td&gt;
+      &lt;td&gt;0.126&lt;/td&gt;
+      &lt;td&gt;0.116&lt;/td&gt;
+      &lt;td&gt;0.097&lt;/td&gt;
+      &lt;td&gt;0.083&lt;/td&gt;
+      &lt;td&gt;0.097&lt;/td&gt;
+      &lt;td&gt;0.072&lt;/td&gt;
+      &lt;td&gt;0.116&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So 2 is the most common mistake, accounting for nearly 19% of errors. 0, 1 and 8 are the less common.&lt;/p&gt;
+
+&lt;p&gt;Finally, which numbers does the model mostly get woring?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;df_error_shares = pd.DataFrame({&amp;quot;as 0&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 0].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 1&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 1].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 2&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 2].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 3&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 3].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 4&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 4].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 5&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 5].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 6&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 6].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 7&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 7].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 8&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 8].shape[0]/incorrect.shape[0],3),
+                                &amp;quot;as 9&amp;quot; : round(incorrect[incorrect[&amp;quot;actual&amp;quot;] == 9].shape[0]/incorrect.shape[0],3)},
+                              index=[0])
+
+df_error_shares   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div&gt;
+&lt;style scoped&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&#34;1&#34; class=&#34;dataframe&#34;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&#34;text-align: right;&#34;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;as 0&lt;/th&gt;
+      &lt;th&gt;as 1&lt;/th&gt;
+      &lt;th&gt;as 2&lt;/th&gt;
+      &lt;th&gt;as 3&lt;/th&gt;
+      &lt;th&gt;as 4&lt;/th&gt;
+      &lt;th&gt;as 5&lt;/th&gt;
+      &lt;th&gt;as 6&lt;/th&gt;
+      &lt;th&gt;as 7&lt;/th&gt;
+      &lt;th&gt;as 8&lt;/th&gt;
+      &lt;th&gt;as 9&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;0.029&lt;/td&gt;
+      &lt;td&gt;0.061&lt;/td&gt;
+      &lt;td&gt;0.054&lt;/td&gt;
+      &lt;td&gt;0.126&lt;/td&gt;
+      &lt;td&gt;0.101&lt;/td&gt;
+      &lt;td&gt;0.134&lt;/td&gt;
+      &lt;td&gt;0.04&lt;/td&gt;
+      &lt;td&gt;0.108&lt;/td&gt;
+      &lt;td&gt;0.141&lt;/td&gt;
+      &lt;td&gt;0.206&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The most difficult digits to classify are 9, 3 and 8. We could continue investigating, but I think we already covered enough for today!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusions&#34;&gt;Conclusions&lt;/h2&gt;
+
+&lt;p&gt;We have seen how five different learning algorithms without nets can do a good job at identigying handwriten digits. Two of them, logistic regression and knn, benefit from a preliminary PCA applied to the feature vectors, whereas the others, random forest, svm and gbm, give the best results on the full feature vectors. Our best model is an average of 7 models, at 97.23% accuracy. SVM can go up to 99.44%, as documented &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34;&gt;here&lt;/a&gt;. With neural networks, the accuracy can be as high as 99.65%, presumably with a considerable effort.&lt;/p&gt;
+
+&lt;h2 id=&#34;acknowledgements&#34;&gt;Acknowledgements&lt;/h2&gt;
+
+&lt;p&gt;The inspiration to write this post came to me while reading &lt;a href=&#34;http://neuralnetworksanddeeplearning.com/index.html&#34;&gt;Michael Nielsen&amp;rsquo;s online book on neural networks&lt;/a&gt;. He uses the MNIST database to train a neural network, mentioning that good results can be achieved with other learning algorithms also. This triggered my curiosity, so I dug deeper and ended up writing this post. I also borrowed some ideas from &lt;a href=&#34;https://towardsdatascience.com/pca-using-python-scikit-learn-e653f8989e60&#34;&gt;here&lt;/a&gt;, particularly concerning the visualisation of PCA&amp;rsquo;s effect on the digits.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
