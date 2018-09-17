@@ -45,6 +45,17 @@
 &lt;h2 id=&#34;contact&#34;&gt;Contact&lt;/h2&gt;
 
 &lt;p&gt;Work in progress, stay tuned!&lt;/p&gt;
+
+&lt;form action=&#34;https://api.formferret.com/v1/f/YOUR_UNIQUE_FORM_ID&#34;
+      method=&#34;POST&#34;
+      accept-charset=&#34;UTF-8&#34;&gt;
+  
+  &lt;input name=&#34;_gotcha&#34; type=&#34;text&#34; /&gt;
+  
+  &lt;input name=&#34;email&#34; type=&#34;email&#34; placeholder=&#34;you@domain.com&#34;/&gt;
+  
+  &lt;button type=&#34;submit&#34;&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
 </description>
     </item>
     

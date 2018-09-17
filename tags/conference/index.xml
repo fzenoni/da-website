@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Conference on Data Analytics</title>
+    <link>/tags/conference/</link>
+    <description>Recent content in Conference on Data Analytics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Altran Belgium</copyright>
+    <lastBuildDate>Mon, 17 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/tags/conference/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Report from State of the Map 2018</title>
+      <link>/2018/09/17/report/</link>
+      <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/17/report/</guid>
+      <description>&lt;div id=&#34;my-first-sotm-conference&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;My first SotM conference&lt;/h2&gt;
+&lt;p&gt;We’re back on this blog after the summer pause, with the report of my attendance to the very popular State of the Map (SotM) conference, on July 28-30 at the Politecnico di Milano. This university is as per &lt;a href=&#34;https://en.wikipedia.org/wiki/Polytechnic_University_of_Milan&#34;&gt;Wikipedia&lt;/a&gt; the largest technical university in Italy. SotM is far from being a niche conference, given the 400 attendees and the 50 nationalities represented. Indeed, &lt;a href=&#34;https://www.openstreetmap.org&#34;&gt;OpenStreetMap&lt;/a&gt; (OSM) is a growing community, not only heavily used by &lt;a href=&#34;https://www.hotosm.org/&#34;&gt;non-profit and humanitarian organizations&lt;/a&gt; but more and more by private companies. If we look at the &lt;a href=&#34;https://wiki.openstreetmap.org/wiki/State_of_the_Map_2018#Sponsorship&#34;&gt;sponsors list&lt;/a&gt;, we see it’s not only the case for specialized ones such as &lt;a href=&#34;https://www.mapbox.com/&#34;&gt;Mapbox&lt;/a&gt; or &lt;a href=&#34;https://www.mapillary.com/&#34;&gt;Mapillary&lt;/a&gt;: the business value of crowd-sourced and almost live-updated information is indeed appreciated by big to very big players like TeleNav, and even Microsoft/Bing and Facebook. One aspect that particularly strikes in the general OSM community is the value given to the contribution to the OSM database. And Facebook sure knew how to make a good impression: at the conference its representative announced that in the last six months they went to use OSM to support their services from 22 countries, to essentially the whole planet, with the notable exceptions of Argentina, India, Pakistan, Russia, and Turkey (and yes, China is included in their list, despite the &lt;a href=&#34;https://en.wikipedia.org/wiki/Websites_blocked_in_mainland_China&#34;&gt;evidence&lt;/a&gt;). Such a declaration of interest towards the OSM world was indeed well received.&lt;/p&gt;
+&lt;div class=&#34;figure&#34; style=&#34;text-align: center&#34;&gt;&lt;span id=&#34;fig:venue&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;SotM_pictures/IMG_20180729_153544.jpg&#34; alt=&#34;«Voi darete all&#39;Italia Ingegneri, Architetti»&#34; width=&#34;50%&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 1: «Voi darete all’Italia Ingegneri, Architetti»
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Nevertheless, there is no reason to believe OSM, nor the conference, was a repository of corporate talks and personalities: many varied people from a lot of horizons were there, from academic to self-employed web developers, simple mapping enthusiasts, and volunteers. Witnessing this enthusiasm and creativity, together with the opportunity to know new people from all around the world and to make new friends, was the best part of the conference.&lt;/p&gt;
+&lt;p&gt;I also participated at the poster session. I capitalized on the team’s experience to generate a map of Milan (extracted of course from OSM) with a color-coding of the buildings (obtained from the Copernicus Land Monitoring Service at the European Environment Agency) that expresses the average time by foot to the five restaurants closest to their centroid. The tracks and times were obtained thanks to the &lt;a href=&#34;http://project-osrm.org/&#34;&gt;OSRM project&lt;/a&gt;. You can see the poster &lt;a href=&#34;https://www.dropbox.com/s/0hbd7832piu4pu0/FZenoni_SotM_Poster.pdf?dl=0&#34;&gt;here&lt;/a&gt;, as well as the &lt;a href=&#34;https://github.com/fzenoni/SotM-poster-submission&#34;&gt;source code&lt;/a&gt; needed to reproduce it. The workflow consists in:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;a C++ script relying on the &lt;a href=&#34;http://project-osrm.org/&#34;&gt;Open Source Routing Machine&lt;/a&gt; library to compute the routes and walking distances,&lt;/li&gt;
+&lt;li&gt;and R scripts, for the data manipulation and visualization, mainly with the &lt;code&gt;sf&lt;/code&gt; and &lt;code&gt;ggplot2&lt;/code&gt; libraries.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;figure&#34; style=&#34;text-align: center&#34;&gt;&lt;span id=&#34;fig:poster&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;SotM_pictures/IMG_20180730_093834.jpg&#34; alt=&#34;The poster and his author&#34; width=&#34;50%&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 2: The poster and his author
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Among all the presentations I have attended, the following ones caught my attention.&lt;/p&gt;
+&lt;div id=&#34;qt-to-build-osm-based-maps&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;a href=&#34;https://2018.stateofthemap.org/2018/T023-Qt_to_create_OSM-based_apps/&#34;&gt;Qt to build OSM-based maps&lt;/a&gt;&lt;/h3&gt;
+&lt;div id=&#34;by-paolo-angelelli&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;by Paolo Angelelli&lt;/h5&gt;
+&lt;p&gt;Qt is a “cross-platform application framework and widget toolkit”. To use Qt means essentially to code in C++, but also in Javascript and QML. QML stands for Qt Modeling Language, user interface markup language. It was introduced in Qt4, and is now mature in Qt5. Qt5 come with a lot of add-ons. In Qt5 there are a ton of add-ons, such as Qt location that comes with submodules:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;Positioning&lt;/em&gt;: C++ and QML API to retrieve the current location, which works on Linux, WinRT, Android, MacOS, iOS, and serial NMEA&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Location&lt;/em&gt;: C++ and QML API for geocoding, routing, with PoI search and manipulation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There’s also a QML API for mapping: display maps, add (interactive) content. The framework comes with a built-in raster engine (looks good), extensible with 3rd party mapping engines. The map can rotate and tilt, you can embed a georeferenced video on top of the map. Qt5.11 (in development) comes with specific maps objects. Finally, an OpenStreetMap plugin is also available. Qt fully consumes OSM data.&lt;/p&gt;
+&lt;p&gt;I personally don’t have any prior experience in developping in Qt, but it’s good to know that I can brush off my C++ and use it for this kind of application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;large-scale-deep-learning-for-map-making&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;&lt;a href=&#34;https://2018.stateofthemap.org/2018/T115-Large_Scale_Deep_Learning_for_Map_Making/&#34;&gt;Large scale Deep Learning for Map Making&lt;/a&gt;&lt;/h3&gt;
+&lt;div id=&#34;by-aline-negreanu-gliga-bogdan-telenav&#34; class=&#34;section level5&#34;&gt;
+&lt;h5&gt;by Aline Negreanu, Gliga Bogdan (TeleNav)&lt;/h5&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.telenav.com/home&#34;&gt;TeleNav&lt;/a&gt; is a company providing location-based services based on GPS data, among other things. In this presentation, two employees presented their deep learning strategy to identify features from street images.&lt;/p&gt;
+&lt;p&gt;Several steps were detailed:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Gather images. They have an mobile app for dashcam images&lt;/li&gt;
+&lt;li&gt;Create tag dataset. Features are selected and tagged with icons (traffic lights, street signs, etc.). There are currently 70000 labeled images from the USA.&lt;/li&gt;
+&lt;li&gt;Detect road signs in images. They created an AI system to match images and tags without human intervention. Deep Learning for Object Detection is used, with autodetection. This involves:
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Fully convolution networks + Classifier (using &lt;a href=&#34;http://caffe.berkeleyvision.org/&#34;&gt;Caffe&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;Single-shot detector (using &lt;a href=&#34;https://keras.io/&#34;&gt;Keras&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;RetinaNet (again Keras)&lt;/li&gt;
+&lt;/ol&gt;
+The accuracy is as high as 92% on 55 classes. The reported elaboration time is 0.3 s per image on a NVIDIA V100.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Their detection is compared against OSM.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Localize the user detections. The GPS location is needed, with both image location and sign location.&lt;/li&gt;
+&lt;li&gt;Cluster the detections. You need to aggregate what refers to the same physical sign. This is because you don’t need to map the same sign 10 times, you cluster them and allocate one single location.&lt;/li&gt;
+&lt;li&gt;Match cluster centroid to a street.&lt;/li&gt;
+&lt;li&gt;Compare with OSM information: filter out the information which already exists in OSM.&lt;/li&gt;
+&lt;li&gt;And finally Open source everything &lt;a href=&#34;http://github.com/telenav/telenav.AI&#34; class=&#34;uri&#34;&gt;http://github.com/telenav/telenav.AI&lt;/a&gt;. All detections can viewed and validated in &lt;a href=&#34;http://openstreetcam.org/&#34;&gt;OpenStreetCam&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;They also have a &lt;a href=&#34;https://competitions.codalab.org/competitions/19024&#34;&gt;competition&lt;/a&gt; for detecting traffic signs (10000 $).&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;other-highlights&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Other highlights&lt;/h3&gt;
+&lt;p&gt;During three days attended lots of other inspirational talks.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.twitter.com/juliansimioni&#34;&gt;Julian Simioni&lt;/a&gt; developed &lt;a href=&#34;https://github.com/pelias/pelias&#34;&gt;a piece of software&lt;/a&gt; that interpolates addresses to estimate street numbers that are not (yet) included in OSM.&lt;/li&gt;
+&lt;li&gt;Emanuela Mihut talked about her ongoing PhD research, able to automate the generation of OSM data thanks to convolutional neural networks. This contribution is aimed at facilitating the work of the &lt;a href=&#34;https://www.hotosm.org/updates/&#34;&gt;Humanitarian OpenStreetMap Team&lt;/a&gt; in providing a starting point for mapping areas that suffered a natural calamity.&lt;/li&gt;
+&lt;li&gt;Julien Coupet presented VROOM, an open-source solver for Vehicle Routing Problems, which has &lt;a href=&#34;http://map.vroom-project.org/&#34;&gt;live demo app&lt;/a&gt; to solve the travelling salesman problem.&lt;/li&gt;
+&lt;li&gt;The passionate OSM Belgium team, that organizes &lt;a href=&#34;https://www.meetup.com/OpenStreetMap-Belgium/&#34;&gt;monthly meet-ups&lt;/a&gt;.
+&lt;div class=&#34;figure&#34; style=&#34;text-align: center&#34;&gt;&lt;span id=&#34;fig:belgian&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;SotM_pictures/IMG_20180728_141504.jpg&#34; alt=&#34;Ben Abelshausen from OSM Belgium has the floor.&#34; width=&#34;50%&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 3: Ben Abelshausen from OSM Belgium has the floor.
+&lt;/p&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;I attended a nicely organized workshop organized by MapBox, that taught users how to extract data from OSM through Overpass, style it in Mapbox Studio and create an interactive demo. You can find it &lt;a href=&#34;https://github.com/mapbox/workshops/tree/gh-pages/osm-mapbox-gl-studio-Jul-2018&#34;&gt;here&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;milan-and-beyond&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Milan and beyond&lt;/h3&gt;
+&lt;p&gt;During the closure of the conference, the OSM Foundation awarded the most active and innovative contributors. The venue for next year’s conference was also revealed, and the city of Heidelberg in Germany was chosen. See you there, maybe!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
